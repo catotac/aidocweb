@@ -5,380 +5,264 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>AI Accelerated Documentation — Updates</title>
   <style>
-    :root{--bg:#f5f5f5;--card:#ffffff;--muted:#666;--text:#222;--border:#d9d9d9;--link:#0a58ca;--ok:#2e7d32;--warn:#d39e00;--info:#0d6efd;--danger:#c62828}
-    body{margin:0;font-family:Arial, Helvetica, sans-serif;background:var(--bg);color:var(--text)}
-    .wrap{max-width:980px;margin:0 auto;padding:20px}
-    h1{font-size:24px;margin:0 0 12px;color:#111}
-    h2{margin:0 0 8px}
-    .muted{color:var(--muted);font-size:14px}
-    .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-top:12px}
-    select,input,button{padding:8px;border:1px solid var(--border);border-radius:8px;font-size:14px}
-    button{cursor:pointer;background:#eee}
-    .row{display:flex;gap:12px;flex-wrap:wrap}
-    .kv{background:#f1f1f1;border:1px solid #e5e5e5;border-radius:8px;padding:8px;margin:4px 0}
-    .kv .k{font-size:12px;color:#555}
-    .kv .v{font-weight:bold}
-    .status{display:inline-block;font-size:12px;padding:3px 8px;border-radius:999px;border:1px solid var(--border);margin-left:8px;background:#fafafa}
-    .status.In\ Progress{border-color:#ffecb5;color:#7a5c00;background:#fff8e1}
-    .status.Pilot{border-color:#cfe2ff;color:#0a53be;background:#edf6ff}
-    .status.Blocked{border-color:#f5c2c7;color:#842029;background:#fff1f2}
-    .status.Not\ Started{color:#666}
-    .status.In\ Prod{border-color:#b7e4c7;color:#1b5e20;background:#ecf7ef}
-    .progress{height:8px;background:#eee;border-radius:8px;overflow:hidden;margin-top:6px}
-    .progress>div{height:100%;background:#4caf50}
-    ul{margin:6px 0;padding-left:20px}
+    :root{--bg:#fff;--fg:#222;--muted:#666;--card:#fff;--line:#dcdcdc;--soft:#f6f6f6;--link:#0a58ca}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial, Helvetica, sans-serif;background:var(--bg);color:var(--fg)}
     a{color:var(--link);text-decoration:none}
-    .list{margin-top:8px}
-    .li{display:flex;justify-content:space-between;background:#f7f7f7;padding:6px;border-radius:8px;margin:4px 0;border:1px solid #eee}
-    footer{font-size:12px;color:#666;margin-top:20px;text-align:center}
-    table{width:100%;border-collapse:collapse}
-    th,td{border:1px solid var(--border);padding:8px;text-align:left;font-size:14px}
+    .wrap{max-width:1200px;margin:0 auto;padding:20px}
+    header{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;background:#f9f9f9;border:1px solid var(--line);border-radius:10px;padding:16px}
+    h1{font-size:28px;margin:0;color:#111}
+    h2{margin:10px 0 8px}
+    .muted{color:var(--muted)}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin-top:16px}
+    .row{display:flex;gap:12px;flex-wrap:wrap}
+    select,input,button{padding:8px;border:1px solid var(--line);border-radius:8px;font-size:14px}
+    button{cursor:pointer;background:#eee}
+    .logo{max-height:180px;border-radius:8px;border:1px solid var(--line)}
+    table{width:100%;border-collapse:collapse;margin-top:10px}
+    th,td{border:1px solid var(--line);padding:8px;text-align:left;font-size:14px;vertical-align:top}
     th{background:#f3f3f3}
-    .pill{display:inline-block;padding:3px 8px;border-radius:999px;border:1px solid var(--border);background:#fafafa;font-size:12px}
-    .eta{white-space:nowrap}
-    .sr-only{position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden}
-    .toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px}
-    .note{font-size:12px;color:#777}
-    .danger{color:var(--danger)}
-    .dropzone{border:2px dashed #bbb;border-radius:10px;padding:10px;text-align:center;background:#fafafa}
-    .dropzone.drag{background:#f0f7ff;border-color:#9ec5fe}
-    @media print{.toolbar, header .row, #projectSelect, #search, #statusFilter, #copyLinkBtn, #uploadBtn, #fileInput, #ghToken, #saveToken{display:none!important}}
+    .status{display:inline-block;font-size:12px;padding:3px 8px;border-radius:999px;border:1px solid var(--line);background:#fafafa}
+    .progress{height:8px;background:#eee;border-radius:999px;overflow:hidden}
+    .progress>div{height:100%;background:#4caf50}
+    .cols-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    @media (max-width:900px){.cols-3{grid-template-columns:1fr}}
+    .file-item{display:flex;justify-content:space-between;gap:10px;background:#f7f7f7;border:1px solid #e5e5e5;border-radius:8px;padding:8px;margin:4px 0}
+    footer{font-size:12px;color:var(--muted);margin-top:24px;text-align:center}
   </style>
 </head>
 <body>
   <div class="wrap">
-    <header class="card">
-      <h1>AI Accelerated Documentation <span class="muted">— Project Updates</span></h1>
-      <div class="row" style="margin-top:8px">
-        <div>
-          <label class="muted" for="projectSelect">Select project</label><br>
-          <select id="projectSelect" aria-label="Select project"></select>
-        </div>
-        <div>
-          <label class="muted" for="search">Quick search</label><br>
-          <input id="search" placeholder="Filter by title" aria-label="Quick search projects" />
-        </div>
-        <div>
-          <label class="muted" for="statusFilter">Status</label><br>
-          <select id="statusFilter" aria-label="Filter by status">
-            <option value="">All</option>
-            <option>Not Started</option>
-            <option>In Progress</option>
-            <option>Pilot</option>
-            <option>Blocked</option>
-            <option>In Prod</option>
-          </select>
-        </div>
-        <div style="align-self:flex-end">
-          <button id="copyLinkBtn" title="Copy link to current project">Copy Share Link</button>
+    <header>
+      <div>
+        <h1>AI Accelerated Documentation <span class="muted">— Project Updates</span></h1>
+        <div class="row" style="margin-top:8px">
+          <div>
+            <label class="muted" for="projectSelect">Select project</label><br>
+            <select id="projectSelect" aria-label="Select project"></select>
+          </div>
+          <div>
+            <label class="muted" for="search">Quick search</label><br>
+            <input id="search" placeholder="Filter by title" aria-label="Search projects" />
+          </div>
+          <div>
+            <label class="muted" for="statusFilter">Status</label><br>
+            <select id="statusFilter" aria-label="Filter by status">
+              <option value="">All</option>
+              <option>Not Started</option>
+              <option>In Progress</option>
+              <option>Pilot</option>
+              <option>Blocked</option>
+              <option>In Prod</option>
+            </select>
+          </div>
+          <div style="align-self:flex-end">
+            <button id="copyLinkBtn" title="Copy link to current project">Copy Share Link</button>
+          </div>
         </div>
       </div>
+      <!-- Put a real image file in /images and update the src if needed -->
+      <img src="images/project-logo.jpg" alt="Project Logo" class="logo" />
     </header>
 
     <!-- Summary table of all projects -->
     <section class="card" id="summary">
       <h2>All Projects — At a Glance</h2>
       <div class="muted" id="lastUpdated"></div>
-      <div class="list" style="margin-top:8px">
-        <table aria-label="Projects summary table">
-          <caption class="sr-only">Summary of projects with status, progress, and ETA</caption>
-          <thead>
-            <tr>
-              <th>Project</th>
-              <th>Status</th>
-              <th>Progress</th>
-              <th>Next Milestone</th>
-              <th>ETA</th>
-              <th>Teams</th>
-              <th>Web</th>
-            </tr>
-          </thead>
-          <tbody id="summaryBody"></tbody>
-        </table>
-      </div>
-      <div class="note">Tip: Click a row to open that project's detail view.</div>
+      <table aria-label="Projects summary table">
+        <thead>
+          <tr>
+            <th style="width:18%">Project</th>
+            <th style="width:14%">Main Contributor</th>
+            <th>Target State</th>
+            <th style="width:10%">Status</th>
+            <th style="width:12%">Progress</th>
+            <th style="width:10%">ETA</th>
+            <th style="width:6%">Teams</th>
+            <th style="width:6%">Web</th>
+          </tr>
+        </thead>
+        <tbody id="summaryBody"></tbody>
+      </table>
+      <div class="muted">Tip: Click a row to open that project's detail view.</div>
     </section>
 
     <!-- Per-project detail view -->
     <section id="projectView" class="card" aria-live="polite"></section>
 
+    <!-- Optional shared templates section -->
+    <section class="card" id="sharedTemplates">
+      <h2>Shared Templates & Example Artefacts</h2>
+      <p class="muted">Place shared files under <code>templates/</code> in your repo. Replace links with your real files.</p>
+      <ul class="muted">
+        <li><a href="templates/peer-review-checklist.docx" target="_blank">Peer Review Checklist (DOCX)</a></li>
+        <li><a href="templates/mdd-template.docx" target="_blank">MDD Template (DOCX)</a></li>
+        <li><a href="templates/mvd-template.docx" target="_blank">MVD Template (DOCX)</a></li>
+        <li><a href="templates/annual-review-template.docx" target="_blank">Annual Review Template (DOCX)</a></li>
+        <li><a href="templates/metrics-dashboard.xlsx" target="_blank">Metrics Dashboard (XLSX)</a></li>
+        <li><a href="templates/final-report-sample.pdf" target="_blank">Final Report – Sample (PDF)</a></li>
+      </ul>
+    </section>
+
     <footer>© <span id="year"></span> · GitHub Pages Demo</footer>
   </div>
 
-  <!-- Minimal config for artefact uploads -->
-  <script id="config" type="application/json">{
-    "github": {
-      "owner": "YOUR_GH_USERNAME",
-      "repo": "YOUR_REPO_NAME",
-      "branch": "main",
-      "basePath": "artefacts"
-    }
-  }</script>
-
+  <!-- Data: prefilled with nine projects; update as needed. -->
   <script id="projects" type="application/json">{
-    "owner": "Minerva",
-    "lastUpdated": "TBD",
-    "items": [
-      {"id":"mdd-checker","title":"MDD Checker","status":"In Progress","progress":55,
-       "currentStatus":"Core checks implemented; coverage at ~70%. Pilot with Validation team underway.",
-       "nextSteps":["Expand rule library to 120 checks","Integrate with Minerva auth","Finalize export to PDF/DOCX"],
-       "productionETA":"2025-11-15",
-       "timeline":[{"label":"Design","date":"2025-06-01"},{"label":"PoC","date":"2025-07-10"},{"label":"Pilot","date":"2025-09-05"},{"label":"Minerva Integration","date":"2025-10-20"},{"label":"Production","date":"2025-11-15"}],
-       "links":{"teams":"https://teams.microsoft.com/","web":""}
+    "owner":"Minerva",
+    "lastUpdated":"2025-09-17",
+    "items":[
+      {"id":"mdd-checker","title":"MDD Checker","contributor":"Alice Nguyen","targetState":"Automated MDD checks with Minerva UI handoff; export to PDF/DOCX.","description":"Automatically validates Model Development Documents for completeness and policy alignment.","status":"In Progress","progress":55,"productionETA":"2025-11-15","links":{"teams":"https://teams.microsoft.com/","web":""},
+        "artefacts":[{"name":"MDD Validation Rules (PDF)","path":"artefacts/mdd-checker/mdd-rules.pdf"}],
+        "files":[{"name":"MDD Template (DOCX)","path":"artefacts/mdd-checker/mdd-template.docx"},{"name":"Checklist (XLSX)","path":"artefacts/mdd-checker/checklist.xlsx"}],
+        "examples":[{"name":"MDD Example – Final (PDF)","path":"artefacts/mdd-checker/mdd-example-final.pdf"}],
+        "nextSteps":["Expand rule library","Minerva pilot","Export formatter"]
       },
-      {"id":"mvd-checker","title":"MVD Checker","status":"Pilot","progress":70,
-       "currentStatus":"Pilot with Risk Governance; 30 docs validated.",
-       "nextSteps":["Add explainability summaries","Harden error handling","Performance tuning"],
-       "productionETA":"2025-12-10",
-       "timeline":[{"label":"Design","date":"2025-05-15"},{"label":"PoC","date":"2025-07-01"},{"label":"Pilot","date":"2025-09-25"},{"label":"Minerva Integration","date":"2025-11-15"},{"label":"Production","date":"2025-12-10"}],
-       "links":{"teams":"https://teams.microsoft.com/","web":""}
+      {"id":"mvd-checker","title":"MVD Checker","contributor":"Rahul Sharma","targetState":"Policy-aligned MVD validation with explainability and Minerva handoff.","description":"Runs automated checks on Model Validation Documents with traceable explanations.","status":"Pilot","progress":70,"productionETA":"2025-12-10","links":{"teams":"https://teams.microsoft.com/","web":""},
+        "artefacts":[{"name":"MVD Rulebook (PDF)","path":"artefacts/mvd-checker/mvd-rulebook.pdf"}],
+        "files":[{"name":"MVD Template (DOCX)","path":"artefacts/mvd-checker/mvd-template.docx"}],
+        "examples":[{"name":"MVD Example – Final (PDF)","path":"artefacts/mvd-checker/mvd-example-final.pdf"}],
+        "nextSteps":["Add explainability UI","Error handling","Perf tuning"]
       },
-      {"id":"mdd-generator","title":"MDD Generator","status":"In Progress","progress":48,
-       "currentStatus":"Templates finalized; RAG connectors configured.",
-       "nextSteps":["Wire reviewer workflow","Guardrail evaluation","Autosave + versioning"],
-       "productionETA":"2026-01-20",
-       "timeline":[{"label":"Design","date":"2025-07-20"},{"label":"PoC","date":"2025-08-30"},{"label":"Pilot","date":"2025-11-30"},{"label":"Minerva Integration","date":"2026-01-05"},{"label":"Production","date":"2026-01-20"}],
-       "links":{"teams":"https://teams.microsoft.com/","web":""}
+      {"id":"mdd-generator","title":"MDD Generator","contributor":"Sara Kim","targetState":"RAG-backed draft MDDs with reviewer workflow and versioning.","description":"Generates first drafts of MDDs using retrieval and templates; reviewers finalize.","status":"In Progress","progress":48,"productionETA":"2026-01-20","links":{"teams":"https://teams.microsoft.com/","web":""},
+        "artefacts":[{"name":"Prompt Library (JSON)","path":"artefacts/mdd-generator/prompt-library.json"}],
+        "files":[{"name":"Reviewer Guide (DOCX)","path":"artefacts/mdd-generator/reviewer-guide.docx"}],
+        "examples":[{"name":"Generated MDD – Sample (DOCX)","path":"artefacts/mdd-generator/generated-mdd-sample.docx"}],
+        "nextSteps":["Reviewer workflow","Guardrail eval","Autosave"]
       },
-      {"id":"annual-review-generator","title":"Annual Review Generator","status":"In Progress","progress":35,
-       "currentStatus":"Evaluation metrics defined; draft generation working.",
-       "nextSteps":["Human-in-the-loop review","Policy alignment","Accessibility checks"],
-       "productionETA":"2026-02-15",
-       "timeline":[{"label":"Design","date":"2025-08-10"},{"label":"PoC","date":"2025-09-15"},{"label":"Pilot","date":"2025-12-15"},{"label":"Minerva Integration","date":"2026-01-25"},{"label":"Production","date":"2026-02-15"}],
-       "links":{"teams":"https://teams.microsoft.com/","web":""}
+      {"id":"annual-review-generator","title":"Annual Review Generator","contributor":"David Lee","targetState":"Automated annual review drafts with policy alignment and HITL.","description":"Produces annual review drafts with scoring and human-in-the-loop checkpoints.","status":"In Progress","progress":35,"productionETA":"2026-02-15","links":{"teams":"https://teams.microsoft.com/","web":""},
+        "artefacts":[{"name":"Evaluation Metrics (PDF)","path":"artefacts/annual-review-generator/eval-metrics.pdf"}],
+        "files":[{"name":"Annual Review Template (DOCX)","path":"artefacts/annual-review-generator/annual-review-template.docx"}],
+        "examples":[{"name":"Annual Review – Example (PDF)","path":"artefacts/annual-review-generator/annual-review-sample.pdf"}],
+        "nextSteps":["HITL gates","Policy alignment","Accessibility checks"]
       },
-      {"id":"iad-generator","title":"IAD Generator","status":"Blocked","progress":20,
-       "currentStatus":"Awaiting data access approvals.",
-       "nextSteps":["Complete security review","Unblock dataset access","Resume development"],
-       "productionETA":"TBD",
-       "timeline":[{"label":"Design","date":"2025-05-05"},{"label":"PoC","date":"2025-06-20"}],
-       "links":{"teams":"https://teams.microsoft.com/","web":""}
+      {"id":"iad-generator","title":"IAD Generator","contributor":"Priya Patel","targetState":"IAD generation with secure data access and audit trail.","description":"Automates creation of Internal Audit Documents with traceability and security.","status":"Blocked","progress":20,"productionETA":"TBD","links":{"teams":"https://teams.microsoft.com/","web":""},
+        "artefacts":[{"name":"Security Questionnaire (DOCX)","path":"artefacts/iad-generator/security-questionnaire.docx"}],
+        "files":[{"name":"Data Access Request (DOCX)","path":"artefacts/iad-generator/data-access-request.docx"}],
+        "examples":[{"name":"IAD – Example (PDF)","path":"artefacts/iad-generator/iad-example.pdf"}],
+        "nextSteps":["Security review","Unblock dataset","Resume dev"]
       },
-      {"id":"mlca-mmp-checker","title":"MLCA / MMP Checker","status":"In Progress","progress":40,
-       "currentStatus":"Rule definitions drafted; partial parser ready.",
-       "nextSteps":["Finalize schema mapping","Add 30 new rules","Connect to Minerva UI"],
-       "productionETA":"2026-03-20",
-       "timeline":[{"label":"Design","date":"2025-08-01"},{"label":"PoC","date":"2025-09-05"},{"label":"Pilot","date":"2025-12-10"},{"label":"Minerva Integration","date":"2026-02-25"},{"label":"Production","date":"2026-03-20"}],
-       "links":{"teams":"https://teams.microsoft.com/","web":""}
+      {"id":"mlca-mmp-checker","title":"MLCA / MMP Checker","contributor":"Jamal Ortiz","targetState":"Automated MLCA/MMP compliance checks with rule library and Minerva UI.","description":"Checks compliance for MLCA/MMP frameworks using automated rules.","status":"In Progress","progress":40,"productionETA":"2026-03-20","links":{"teams":"https://teams.microsoft.com/","web":""},
+        "artefacts":[{"name":"Schema Draft (PDF)","path":"artefacts/mlca-mmp-checker/schema-draft.pdf"}],
+        "files":[{"name":"Rules Spreadsheet (XLSX)","path":"artefacts/mlca-mmp-checker/rules.xlsx"}],
+        "examples":[{"name":"Compliance Report – Sample (PDF)","path":"artefacts/mlca-mmp-checker/compliance-report-sample.pdf"}],
+        "nextSteps":["Finalize schema mapping","Add rules","Connect to Minerva UI"]
+      },
+      {"id":"peer-review-checklist","title":"Peer Review Checklist","contributor":"TBD","targetState":"Standardized peer review workflow with templates and scoring.","description":"Checklist and templates to ensure consistent peer review of documentation.","status":"Not Started","progress":0,"productionETA":"TBD","links":{"teams":"","web":""},
+        "artefacts":[{"name":"Policy Notes (PDF)","path":"artefacts/peer-review-checklist/policy-notes.pdf"}],
+        "files":[{"name":"Peer Review Checklist (DOCX)","path":"artefacts/peer-review-checklist/peer-review-checklist.docx"},{"name":"Reviewer Sheet (XLSX)","path":"artefacts/peer-review-checklist/reviewer-sheet.xlsx"}],
+        "examples":[{"name":"Peer Review – Completed Example (PDF)","path":"artefacts/peer-review-checklist/peer-review-example.pdf"}],
+        "nextSteps":["Draft checklist","Pilot with authors","Publish v1"]
+      },
+      {"id":"vesta","title":"VESTA","contributor":"TBD","targetState":"End‑to‑end validation & evidence synthesis assistant integrated with Minerva.","description":"Validation & evidence synthesis assistant guiding validators with AI support.","status":"Not Started","progress":0,"productionETA":"TBD","links":{"teams":"","web":""},
+        "artefacts":[{"name":"VESTA Concept (PDF)","path":"artefacts/vesta/vesta-concept.pdf"}],
+        "files":[{"name":"VESTA Requirements (DOCX)","path":"artefacts/vesta/vesta-requirements.docx"}],
+        "examples":[{"name":"Evidence Synthesis – Sample (PDF)","path":"artefacts/vesta/evidence-synthesis-sample.pdf"}],
+        "nextSteps":["Scope MVP","Design flows","PoC"]
+      },
+      {"id":"writing-buddy","title":"Writing Buddy","contributor":"TBD","targetState":"Authoring copilot for technical docs with style/rules assistance.","description":"AI assistant to help authors draft and refine technical documentation.","status":"Not Started","progress":0,"productionETA":"TBD","links":{"teams":"","web":""},
+        "artefacts":[{"name":"Style Guide (PDF)","path":"artefacts/writing-buddy/style-guide.pdf"}],
+        "files":[{"name":"Prompt Patterns (DOCX)","path":"artefacts/writing-buddy/prompt-patterns.docx"}],
+        "examples":[{"name":"Edited Draft – Example (PDF)","path":"artefacts/writing-buddy/edited-draft-example.pdf"}],
+        "nextSteps":["Collect style rules","Prototype suggestions","User testing"]
       }
     ]
   }</script>
 
   <script>
+    // Helpers
     const $ = (s,el=document)=>el.querySelector(s);
-    const cfg = JSON.parse($('#config').textContent);
     const data = JSON.parse($('#projects').textContent);
-    const sel=$('#projectSelect'),search=$('#search'),view=$('#projectView');
-    const statusFilter=$('#statusFilter');
-    const fmtDate=d=>!d||d==='TBD'?d:new Date(d+"T00:00:00").toLocaleDateString();
+    const sel=$('#projectSelect'),search=$('#search'),statusFilter=$('#statusFilter'),view=$('#projectView');
+    const fmt = (d)=>!d||d==='TBD'? 'TBD' : new Date(d+"T00:00:00").toLocaleDateString();
+    const ellip = (t,n=100)=> t && t.length>n ? t.slice(0,n-1)+'…' : (t||'');
 
-    // --- Helpers ---
-    function nextMilestone(p){
-      if(!p.timeline||!p.timeline.length) return {label:'—', date:'—'};
-      const today = new Date();
-      const upcoming = p.timeline
-        .map(t=>({...t, d: t.date==='TBD'?null:new Date(t.date+"T00:00:00")}))
-        .filter(t=>t.d && t.d>=today)
-        .sort((a,b)=>a.d-b.d)[0];
-      return upcoming?{label:upcoming.label, date:fmtDate(upcoming.date)}:{label:p.timeline[p.timeline.length-1].label, date:fmtDate(p.timeline[p.timeline.length-1].date)};
-    }
-
-    function projectById(id){ return data.items.find(x=>x.id===id)||data.items[0]; }
-
-    // --- Summary table ---
+    // Summary table
     function renderSummary(){
       $('#lastUpdated').textContent = 'Last updated: '+(data.lastUpdated||'TBD');
       const tbody = $('#summaryBody');
-      const filterText = (search.value||'').toLowerCase();
-      const statusVal = statusFilter.value;
+      const filter = (search?.value||'').toLowerCase();
+      const status = statusFilter?.value||'';
       const rows = data.items
-        .filter(p=>p.title.toLowerCase().includes(filterText))
-        .filter(p=>!statusVal || p.status===statusVal)
-        .map(p=>{
-          const nm = nextMilestone(p);
-          return `<tr data-id="${p.id}" class="summary-row" style="cursor:pointer">
-            <td>${p.title}</td>
-            <td><span class="status ${p.status.replaceAll(' ','\ ')}">${p.status}</span></td>
-            <td>
-              <span class="sr-only">${p.progress||0}%</span>
-              <div class="progress" title="${p.progress||0}%"><div style="width:${p.progress||0}%"></div></div>
-            </td>
-            <td>${nm.label} <span class="muted">${nm.date}</span></td>
-            <td class="eta">${fmtDate(p.productionETA)||'TBD'}</td>
-            <td>${p.links?.teams?`<a href="${p.links.teams}" target="_blank" rel="noopener">Open</a>`:'—'}</td>
-            <td>${p.links?.web?`<a href="${p.links.web}" target="_blank" rel="noopener">Open</a>`:'—'}</td>
-          </tr>`;
-        }).join('');
-      tbody.innerHTML = rows || `<tr><td colspan="7" class="muted">No projects match.</td></tr>`;
-      // Row click to open detail
-      [...document.querySelectorAll('.summary-row')].forEach(tr=>{
-        tr.addEventListener('click',()=>{ selectProject(tr.dataset.id); });
-      });
+        .filter(p=>p.title.toLowerCase().includes(filter))
+        .filter(p=>!status || p.status===status)
+        .map(p=>`<tr data-id="${p.id}" style="cursor:pointer">
+          <td>${p.title}</td>
+          <td>${p.contributor||'TBD'}</td>
+          <td>${ellip(p.targetState||'TBD', 80)}</td>
+          <td>${p.status}</td>
+          <td><div class="progress" title="${p.progress||0}%"><div style="width:${p.progress||0}%"></div></div></td>
+          <td>${fmt(p.productionETA)}</td>
+          <td>${p.links?.teams?`<a href="${p.links.teams}" target="_blank" rel="noopener">Open</a>`:'—'}</td>
+          <td>${p.links?.web?`<a href="${p.links.web}" target="_blank" rel="noopener">Open</a>`:'—'}</td>
+        </tr>`).join('');
+      tbody.innerHTML = rows || `<tr><td colspan="8" class="muted">No projects match your filters.</td></tr>`;
+      [...document.querySelectorAll('#summaryBody tr')].forEach(tr=> tr.addEventListener('click',()=> selectProject(tr.dataset.id)) );
     }
 
-    // --- Populate selector & search ---
-    function populateOptions(){
-      const filterText = (search.value||'').toLowerCase();
-      const statusVal = statusFilter.value;
-      sel.innerHTML='';
-      data.items
-        .filter(p=>p.title.toLowerCase().includes(filterText))
-        .filter(p=>!statusVal || p.status===statusVal)
-        .forEach(p=>{ const o=document.createElement('option'); o.value=p.id; o.textContent=p.title; sel.appendChild(o); });
-      if(!sel.value){ view.innerHTML = '<div class="muted">No projects match.</div>'; }
+    // Project view
+    function listToHTML(items){
+      if(!items || !items.length) return '<div class="muted">None yet</div>';
+      return items.map(f=>`<div class="file-item"><div>${f.name}</div><div><a href='${f.path}' target='_blank' rel='noopener'>View</a></div></div>`).join('');
     }
 
-    search.addEventListener('input',()=>{ renderSummary(); populateOptions(); });
-    statusFilter.addEventListener('change',()=>{ renderSummary(); populateOptions(); });
-    sel.addEventListener('change',e=>render(e.target.value));
-
-    // --- Link copy & hash routing ---
-    $('#copyLinkBtn').addEventListener('click',()=>{
-      const id = sel.value || (data.items[0]&&data.items[0].id);
-      const url = location.origin + location.pathname + '#'+id;
-      navigator.clipboard.writeText(url).then(()=>alert('Link copied')); });
-
-    function selectProject(id){
-      if(!id) return; history.replaceState(null,'','#'+id); sel.value=id; render(id);
-    }
-
-    window.addEventListener('hashchange',()=>{ const id=location.hash.replace('#',''); if(id) selectProject(id); });
-
-    // --- GitHub API for artefacts ---
-    const GH = {
-      get token(){ return localStorage.getItem('gh_token')||''; },
-      set token(v){ localStorage.setItem('gh_token', v||''); },
-      async req(path, opts={}){
-        const headers = {'Accept':'application/vnd.github+json'};
-        if(this.token) headers['Authorization'] = 'Bearer '+this.token;
-        const res = await fetch(`https://api.github.com/repos/${cfg.github.owner}/${cfg.github.repo}/${path}`,{...opts, headers:{...headers, ...(opts.headers||{})}});
-        if(!res.ok){ let msg='HTTP '+res.status; try{ const j=await res.json(); if(j.message) msg=j.message; }catch{}; throw new Error(msg); }
-        return res.json();
-      },
-      async listDir(dir){ try{ return await this.req(`contents/${dir}?ref=${encodeURIComponent(cfg.github.branch)}`);}catch(e){ return []; }},
-      async uploadFile(path, contentBase64, message){ return this.req(`contents/${path}`,{ method:'PUT', body: JSON.stringify({message, content: contentBase64, branch: cfg.github.branch}) }); },
-      async deleteFile(path, sha, message){ return this.req(`contents/${path}`,{ method:'DELETE', body: JSON.stringify({message, sha, branch: cfg.github.branch}) }); }
-    };
-
-    function toBase64Async(file){ return new Promise((resolve,reject)=>{ const r=new FileReader(); r.onload=()=>resolve(String(r.result).split(',')[1]); r.onerror=reject; r.readAsDataURL(file); }); }
-
-    // --- Render a project ---
-    async function render(id){
-      const p=projectById(id); if(!p) return;
-      const statusCls = `status ${p.status.replaceAll(' ','\ ')}`;
-      const artefactDir = `${cfg.github.basePath}/${p.id}`;
-      const files = await GH.listDir(artefactDir);
-
-      const nm = nextMilestone(p);
-      const minerva = (p.timeline||[]).find(t=>/minerva/i.test(t.label));
-
-      view.innerHTML=`
+    function renderProject(id){
+      const p = data.items.find(x=>x.id===id)||data.items[0];
+      if(!p){ view.innerHTML = '<div class="muted">No project selected.</div>'; return; }
+      view.innerHTML = `
         <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
-          <h2 style="margin:0">${p.title} <span class="${statusCls}">${p.status}</span></h2>
-          <div class="muted">Last Updated: ${data.lastUpdated||'TBD'}</div>
+          <h2 style="margin:0">${p.title} <span class="status">${p.status}</span></h2>
+          <div class="muted">ETA: ${fmt(p.productionETA)}</div>
         </div>
-        <div class="kv"><div class="k">Owner</div><div class="v">${data.owner}</div></div>
-        <div class="kv"><div class="k">Tentative Production</div><div class="v">${fmtDate(p.productionETA)||'TBD'}</div></div>
-        <div class="kv"><div class="k">Next Milestone</div><div class="v">${nm.label} — ${nm.date}</div></div>
-        <div class="kv"><div class="k">Minerva Integration</div><div class="v">${minerva?fmtDate(minerva.date):'TBD'}</div></div>
-        <div style="margin-top:10px"><strong>Current Status</strong><p>${p.currentStatus||'TBD'}</p>
-          <div class="progress" aria-label="Progress to production" title="${p.progress||0}%"><div style="width:${p.progress||0}%"></div></div>
-        </div>
-
+        <p class="muted" style="margin:6px 0 12px">${p.description||''}</p>
         <div class="row">
           <div class="card" style="flex:1">
-            <div class="muted">Timeline</div>
-            ${(p.timeline&&p.timeline.length)?`<ul>${p.timeline.map(t=>`<li>${t.label} — <span class='muted'>${fmtDate(t.date)}</span></li>`).join('')}</ul>`:'<div class="muted">No timeline yet.</div>'}
+            <div class="muted">Main Contributor</div>
+            <div><strong>${p.contributor||'TBD'}</strong></div>
           </div>
-          <div class="card" style="flex:1">
-            <div class="muted">Links</div>
-            <ul>
-              <li>Teams — ${p.links?.teams?`<a href="${p.links.teams}" target="_blank" rel="noopener">Open</a>`:'<span class="muted">TBD</span>'}</li>
-              <li>Web — ${p.links?.web?`<a href="${p.links.web}" target="_blank" rel="noopener">Open</a>`:'<span class="muted">TBD</span>'}</li>
-            </ul>
+          <div class="card" style="flex:2">
+            <div class="muted">Target State</div>
+            <div>${p.targetState||'TBD'}</div>
           </div>
         </div>
-
-        <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
-            <div>
-              <strong>Artefacts</strong>
-              <div class="muted">Files are stored in <code>${cfg.github.basePath}/${p.id}</code> of <code>${cfg.github.owner}/${cfg.github.repo}</code> (<code>${cfg.github.branch}</code>).</div>
-            </div>
-            <div>
-              <input id="ghToken" type="password" placeholder="GitHub token (repo scope)" style="width:240px" aria-label="GitHub token" />
-              <button id="saveToken">Save Token</button>
-            </div>
+        ${p.nextSteps?`<div class="card"><div class="muted">Next Steps</div><ul>${p.nextSteps.map(s=>`<li>${s}</li>`).join('')}</ul></div>`:''}
+        <div class="cols-3" style="margin-top:12px">
+          <div class="card">
+            <h3 style="margin:0 0 6px">Artefacts</h3>
+            <div class="file-list">${listToHTML(p.artefacts)}</div>
           </div>
-          <div id="dropzone" class="dropzone" style="margin-top:8px">Drop files here or use the picker below</div>
-          <div class="list" id="fileList" style="margin-top:8px"></div>
-          <div class="row" style="margin-top:10px">
-            <input id="fileInput" type="file" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.ppt,.pptx,.txt,.md,.json,.zip" aria-label="Choose files to upload" />
-            <button id="uploadBtn">Upload</button>
+          <div class="card">
+            <h3 style="margin:0 0 6px">Files</h3>
+            <div class="file-list">${listToHTML(p.files)}</div>
           </div>
-          <div class="muted" style="margin-top:6px">Token is stored only in this browser (localStorage). For public repos, listing works without a token; uploads/deletes require a token with <code>repo</code> scope.</div>
-        </div>
-
-        <div class="card">
-          <div class="muted">Next Steps</div>
-          ${(p.nextSteps&&p.nextSteps.length)?`<ul>${p.nextSteps.map(n=>`<li>${n}</li>`).join('')}</ul>`:'<div class="muted">TBD</div>'}
-        </div>
-      `;
-
-      // Files list with delete buttons
-      const fileList = $('#fileList', view);
-      if(Array.isArray(files) && files.length){
-        fileList.innerHTML = files.map(f=>`<div class="li"><div>${f.name}</div><div>
-          <a href="${f.download_url}" target="_blank" rel="noopener">View</a>
-          ${GH.token?`<button data-path="${artefactDir}/${encodeURIComponent(f.name)}" data-sha="${f.sha}" class="delBtn" style="margin-left:8px">Delete</button>`:''}
-        </div></div>`).join('');
-        // attach delete handlers
-        [...fileList.querySelectorAll('.delBtn')].forEach(btn=>{
-          btn.addEventListener('click', async ()=>{
-            if(!confirm('Delete this file?')) return;
-            try{ await GH.deleteFile(btn.dataset.path, btn.dataset.sha, `Delete artefact ${btn.dataset.path}`); alert('Deleted'); render(p.id); }catch(e){ alert('Delete failed: '+e.message); }
-          });
-        });
-      } else { fileList.innerHTML = '<div class="muted">No artefacts yet</div>'; }
-
-      // Token handlers
-      const tokenInput = $('#ghToken', view); tokenInput.value = GH.token;
-      $('#saveToken', view).onclick = ()=>{ GH.token = tokenInput.value.trim(); alert('Token saved locally.'); };
-
-      // Upload handlers (multiple & drag-drop)
-      const fileInput = $('#fileInput', view);
-      const uploadBtn = $('#uploadBtn', view);
-      const dropzone = $('#dropzone', view);
-
-      async function doUpload(files){
-        if(!files || !files.length){ alert('Choose files first.'); return; }
-        if(!GH.token){ alert('Set a GitHub token to upload.'); return; }
-        try{
-          for(const f of files){
-            const base64 = await toBase64Async(f);
-            const path = `${artefactDir}/${encodeURIComponent(f.name)}`;
-            await GH.uploadFile(path, base64, `Add artefact for ${p.id}: ${f.name}`);
-          }
-          alert('Upload complete');
-          render(p.id);
-        }catch(e){ alert('Upload failed: '+e.message); }
-      }
-
-      uploadBtn.onclick = ()=> doUpload(fileInput.files);
-
-      ;['dragenter','dragover'].forEach(evt=> dropzone.addEventListener(evt, e=>{e.preventDefault(); dropzone.classList.add('drag');}));
-      ;['dragleave','drop'].forEach(evt=> dropzone.addEventListener(evt, e=>{e.preventDefault(); dropzone.classList.remove('drag');}));
-      dropzone.addEventListener('drop', e=>{ e.preventDefault(); const files = e.dataTransfer.files; doUpload(files); });
+          <div class="card">
+            <h3 style="margin:0 0 6px">Examples</h3>
+            <div class="file-list">${listToHTML(p.examples)}</div>
+          </div>
+        </div>`;
     }
+
+    // Routing & controls
+    function selectProject(id){ if(!id) return; history.replaceState(null,'','#'+id); sel.value = id; renderProject(id); }
+    window.addEventListener('hashchange',()=>{ const id=location.hash.replace('#',''); if(id) selectProject(id); });
+    document.getElementById('copyLinkBtn').addEventListener('click',()=>{
+      const id = sel.value || (data.items[0]&&data.items[0].id);
+      const url = location.origin + location.pathname + '#'+id;
+      navigator.clipboard.writeText(url).then(()=>alert('Link copied'));
+    });
 
     // Init
     document.addEventListener('DOMContentLoaded',()=>{
-      $('#year').textContent=new Date().getFullYear();
+      document.getElementById('year').textContent=new Date().getFullYear();
+      sel.innerHTML = data.items.map(p=>`<option value="${p.id}">${p.title}</option>`).join('');
       renderSummary();
-      populateOptions();
-      const initial = location.hash.replace('#','') || (data.items[0] && data.items[0].id);
-      if(initial){ sel.value = initial; render(initial); }
+      const initial = location.hash.replace('#','') || (data.items[0]&&data.items[0].id);
+      if(initial){ sel.value = initial; renderProject(initial); }
+      document.getElementById('search').addEventListener('input', renderSummary);
+      document.getElementById('statusFilter').addEventListener('change', renderSummary);
+      sel.addEventListener('change', e=> selectProject(e.target.value));
     });
   </script>
 </body>
 </html>
+
